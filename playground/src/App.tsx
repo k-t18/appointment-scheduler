@@ -1,5 +1,5 @@
 function App() {
-  return <div></div>;
+  return <div>Appointment Scheduler Canvas</div>;
 }
 
 export default App;
