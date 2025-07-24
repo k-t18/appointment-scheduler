@@ -1,6 +1,6 @@
 {
   "name": "appointment-scheduler",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A reusable appointment scheduler UI component library",
   "author": "Karan Tamboli",
   "license": "MIT",
@@ -27,6 +27,10 @@
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/k-t18/appointment-scheduler.git"
   },
   "keywords": [
     "react",
