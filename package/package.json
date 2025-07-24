@@ -1,19 +1,39 @@
 {
-  "name": "package",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "appointment-scheduler",
+  "version": "1.0.1",
+  "description": "A reusable appointment scheduler UI component library",
+  "author": "Your Name",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "prepare": "npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "peerDependencies": {
+    "react": ">=16.8.0 <20.0.0",
+    "react-dom": ">=16.8.0 <20.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "lucide-react": "^0.325.0"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "^3.4.3",
     "tsup": "^8.5.0",
-    "typescript": "^5.8.3"
-  }
+    "typescript": "^5.2.2"
+  },
+  "keywords": [
+    "react",
+    "appointment",
+    "scheduler",
+    "calendar",
+    "component"
+  ]
 }
