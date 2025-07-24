@@ -1,20 +1,36 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData";
+import styled from "@emotion/styled";
 
 dayjs.extend(localeData);
 
-const monthNames = dayjs.months(); // ['January', 'February', ..., 'December']
+// 🗓 Month list
+const monthNames = dayjs.months();
+
+// 🧱 Styled Select
+const Select = styled.select`
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  padding: 0.375rem 0.75rem; /* px-3 py-1.5 */
+  font-size: 0.875rem; /* text-sm */
+  color: #2a3547;
+  outline: none;
+
+  &:focus {
+    border-color: #2a3547;
+    box-shadow: 0 0 0 1px #2a3547;
+  }
+`;
 
 export default function MonthsDropdown() {
-  const currentMonth = dayjs().month(); // 0-based
+  const currentMonth = dayjs().month();
   const currentYear = dayjs().year();
-
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   return (
-    <select
-      className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-[#2a3547] focus:outline-none"
+    <Select
       value={selectedMonth}
       onChange={(e) => setSelectedMonth(Number(e.target.value))}
     >
@@ -23,6 +39,6 @@ export default function MonthsDropdown() {
           {month} {currentYear}
         </option>
       ))}
-    </select>
+    </Select>
   );
 }

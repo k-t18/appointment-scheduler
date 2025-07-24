@@ -1,53 +1,88 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import styled from "@emotion/styled";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+// ⏱ Week start logic
 const getStartOfWeek = (date: Dayjs) => {
   const day = date.day();
   return date.subtract(day === 0 ? 6 : day - 1, "day"); // Monday as start
 };
 
+// 🧱 Styled Components
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const DateGrid = styled.div`
+  display: flex;
+  gap: 0.75rem;
+`;
+
+const DateCard = styled.div<{ isToday: boolean }>`
+  width: 4rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+  background-color: ${({ isToday }) => (isToday ? "#D7F7FB" : "#fff")};
+  color: ${({ isToday }) => (isToday ? "#00abc9" : "#2a3547")};
+`;
+
+const DayLabel = styled.span`
+  font-size: 0.875rem;
+  font-weight: 600;
+`;
+
+const DayNumber = styled.span`
+  font-size: 1.125rem;
+  font-weight: 700;
+`;
+
+const NavButton = styled.button`
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.25rem;
+`;
+
 export default function WeekSlider() {
   const [startDate, setStartDate] = useState(getStartOfWeek(dayjs()));
-
-  const weekDates = Array.from({ length: 7 }, (_, i) =>
-    startDate.add(i, "day")
-  );
   const today = dayjs();
 
   const handlePrev = () => setStartDate(startDate.subtract(7, "day"));
   const handleNext = () => setStartDate(startDate.add(7, "day"));
 
-  return (
-    <div className="flex items-center gap-4">
-      <button onClick={handlePrev}>
-        <ChevronLeft />
-      </button>
+  const weekDates = Array.from({ length: 7 }, (_, i) =>
+    startDate.add(i, "day")
+  );
 
-      <div className="flex gap-3">
+  return (
+    <Container>
+      <NavButton onClick={handlePrev} aria-label="Previous Week">
+        <ChevronLeft />
+      </NavButton>
+
+      <DateGrid>
         {weekDates.map((date) => {
           const isToday = date.isSame(today, "day");
-
-          const bgClass = isToday ? "bg-[#D7F7FB]" : "bg-white";
-          const textColor = isToday ? "text-[#00abc9]" : "text-[#2a3547]";
-
           return (
-            <div
-              key={date.format("YYYY-MM-DD")}
-              className={`w-16 py-2 px-2 flex flex-col items-center rounded-lg shadow-sm ${bgClass} ${textColor}`}
-            >
-              <span className="text-sm font-semibold">
-                {date.format("ddd")}
-              </span>
-              <span className="text-lg font-bold">{date.format("D")}</span>
-            </div>
+            <DateCard key={date.format("YYYY-MM-DD")} isToday={isToday}>
+              <DayLabel>{date.format("ddd")}</DayLabel>
+              <DayNumber>{date.format("D")}</DayNumber>
+            </DateCard>
           );
         })}
-      </div>
+      </DateGrid>
 
-      <button onClick={handleNext}>
+      <NavButton onClick={handleNext} aria-label="Next Week">
         <ChevronRight />
-      </button>
-    </div>
+      </NavButton>
+    </Container>
   );
 }

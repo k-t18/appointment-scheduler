@@ -1,8 +1,8 @@
 {
   "name": "appointment-scheduler",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A reusable appointment scheduler UI component library",
-  "author": "Your Name",
+  "author": "Karan Tamboli",
   "license": "MIT",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup src/index.ts --dts --format esm,cjs",
     "prepare": "npm run build"
   },
   "peerDependencies": {
@@ -19,6 +19,8 @@
     "react-dom": ">=16.8.0 <20.0.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "dayjs": "^1.11.10",
     "lucide-react": "^0.525.0"
   },

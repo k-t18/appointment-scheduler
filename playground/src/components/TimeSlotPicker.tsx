@@ -1,11 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from "react";
 import { Sun, Video, Moon } from "lucide-react";
 import dayjs from "dayjs";
+import styled from "@emotion/styled";
 
 interface TimeSlotPickerProps {
-  startTime?: string; // e.g., "08:00"
-  endTime?: string; // e.g., "22:00"
-  interval?: number; // e.g., 15 or 30
+  startTime?: string;
+  endTime?: string;
+  interval?: number;
 }
 
 const getTimeSlots = (start: string, end: string, step: number): string[] => {
@@ -30,6 +32,72 @@ const categorizeSlots = (slots: string[]) => {
   };
 };
 
+// -------------------
+// Emotion Styled Components
+// -------------------
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  @media (min-width: 640px) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+`;
+
+const GroupWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    flex-wrap: nowrap;
+  }
+`;
+
+const IconWrapper = styled.div`
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: #4b5563; /* text-gray-600 */
+  }
+`;
+
+const SlotGrid = styled.div`
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+`;
+
+const TimeButton = styled.button<{ selected: boolean }>`
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  min-width: 80px;
+  flex-shrink: 0;
+  background-color: ${({ selected }) => (selected ? "#00abc9" : "#fff")};
+  color: ${({ selected }) =>
+    selected ? "#fff" : "#1f2937"}; /* text-gray-800 */
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ selected }) => (selected ? "#00abc9" : "#f3f4f6")};
+  }
+`;
+
 export default function TimeSlotPicker({
   startTime = "00:00",
   endTime = "23:45",
@@ -44,44 +112,27 @@ export default function TimeSlotPicker({
     icon: React.ReactNode,
     times: string[]
   ) => (
-    <div className=" flex items-start gap-4 flex-wrap sm:flex-nowrap w-full">
-      <div className="mt-1 flex-shrink-0">{icon}</div>
-      <div className="grid w-full gap-3 grid-cols-[repeat(auto-fill,minmax(80px,1fr))]">
+    <GroupWrapper>
+      <IconWrapper>{icon}</IconWrapper>
+      <SlotGrid>
         {times.map((time) => (
-          <button
+          <TimeButton
             key={time}
+            selected={selectedTime === time}
             onClick={() => setSelectedTime(time)}
-            className={`border border-gray-300 px-4 py-2 rounded-md text-sm font-medium transition-all min-w-[80px] flex-shrink-0
-              ${
-                selectedTime === time
-                  ? "bg-[#00abc9] text-white"
-                  : "text-gray-800 bg-white"
-              }`}
           >
             {time}
-          </button>
+          </TimeButton>
         ))}
-      </div>
-    </div>
+      </SlotGrid>
+    </GroupWrapper>
   );
 
   return (
-    <div className="space-y-6 w-full px-2 sm:px-0">
-      {renderGroup(
-        "Morning",
-        <Sun className="w-5 h-5 text-gray-600" />,
-        morning
-      )}
-      {renderGroup(
-        "Afternoon",
-        <Video className="w-5 h-5 text-gray-600" />,
-        afternoon
-      )}
-      {renderGroup(
-        "Evening",
-        <Moon className="w-5 h-5 text-gray-600" />,
-        evening
-      )}
-    </div>
+    <Container>
+      {renderGroup("Morning", <Sun />, morning)}
+      {renderGroup("Afternoon", <Video />, afternoon)}
+      {renderGroup("Evening", <Moon />, evening)}
+    </Container>
   );
 }
