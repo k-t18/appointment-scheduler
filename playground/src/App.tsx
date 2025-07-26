@@ -1,8 +1,9 @@
-// import Legends from "./components/Legends";
-// import MonthsDropdown from "./components/MonthsDropdown";
-// import TimeSlotPicker from "./components/TimeSlotPicker";
-// import WeekSlider from "./components/WeekSlider";
-import { WeekSlider, MonthsDropdown } from "appointment-scheduler";
+import Legends from "./components/Legends";
+import MonthsDropdown from "./components/MonthsDropdown";
+import TimeSlotPicker from "./components/TimeSlotPicker";
+import type { WeekSelection } from "./components/WeekSlider";
+import WeekSlider from "./components/WeekSlider/WeekSlider";
+// import { WeekSlider, MonthsDropdown, Legends, TimeSlotPicker } from "appointment-scheduler";
 
 import styled from "@emotion/styled";
 
@@ -42,12 +43,18 @@ function App() {
   return (
     <Container>
       <TopRightFlex>
-        <WeekSlider />
+        <WeekSlider
+          onDateSelect={(selection: WeekSelection) => {
+            // This will console.log whenever user clicks a date
+            console.log("Selected date:", selection.selectedDate); // "2025-07-25"
+            console.log("Full selection data:", selection);
+          }}
+        />
         <div className="">
           <MonthsDropdown />
         </div>
       </TopRightFlex>
-      {/* <div className="mt-4">
+      <div className="mt-4">
         <TimeSlotPicker startTime={"08:00"} endTime={"22:00"} interval={15} />
       </div>
       <div className="flex justify-end mt-4">
@@ -61,7 +68,7 @@ function App() {
             { label: "Booked", color: "#d3d3d3", variant: "solid" },
           ]}
         />
-      </div> */}
+      </div>
     </Container>
   );
 }
