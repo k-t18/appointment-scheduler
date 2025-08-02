@@ -1,11 +1,10 @@
-import Legends from "./components/Legends";
-import MonthsDropdown from "./components/MonthsDropdown";
-import TimeSlotPicker from "./components/TimeSlotPicker";
-import type { WeekSelection } from "./components/WeekSlider";
-import WeekSlider from "./components/WeekSlider/WeekSlider";
+import Legends from './components/Legends';
+import MonthsDropdown from './components/MonthsDropdown';
+import TimeSlotPicker from './components/TimeSlotPicker';
+import { WeeklySlider, type WeekSelection } from './components/WeekSlider';
 // import { WeekSlider, MonthsDropdown, Legends, TimeSlotPicker } from "appointment-scheduler";
 
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 function App() {
   // Outer wrapper
@@ -43,29 +42,36 @@ function App() {
   return (
     <Container>
       <TopRightFlex>
-        <WeekSlider
-          onDateSelect={(selection: WeekSelection) => {
-            // This will console.log whenever user clicks a date
-            console.log("Selected date:", selection.selectedDate); // "2025-07-25"
-            console.log("Full selection data:", selection);
+        <WeeklySlider
+          selectedDate="2025-08-02"
+          onDateSelect={(selected: WeekSelection) => console.log('Selected:', selected)}
+          onWeekChange={(start, end) => console.log('Week:', start, end)}
+          // availableDates={['2025-08-01', '2025-08-02', '2025-08-03']}
+          dateAvailability={{
+            '2025-08-01': 3,
+            '2025-08-02': 5,
+            '2025-08-03': 7,
           }}
+          highlightToday={true}
+          excludeWeekends={false}
+          showWeekRange={true}
         />
         <div className="">
           <MonthsDropdown />
         </div>
       </TopRightFlex>
       <div className="mt-4">
-        <TimeSlotPicker startTime={"08:00"} endTime={"22:00"} interval={15} />
+        <TimeSlotPicker startTime={'08:00'} endTime={'22:00'} interval={15} />
       </div>
       <div className="flex justify-end mt-4">
         <Legends
           legends={[
-            { label: "Available", color: "#e7e8ec", variant: "outline" },
-            { label: "Selected", color: "#00abc9", variant: "solid" },
-            { label: "Blocked", color: "#ff6b6b", variant: "solid" },
-            { label: "Leave", color: "#9b5de5", variant: "solid" },
-            { label: "Holiday", color: "#ff914d", variant: "solid" },
-            { label: "Booked", color: "#d3d3d3", variant: "solid" },
+            { label: 'Available', color: '#e7e8ec', variant: 'outline' },
+            { label: 'Selected', color: '#00abc9', variant: 'solid' },
+            { label: 'Blocked', color: '#ff6b6b', variant: 'solid' },
+            { label: 'Leave', color: '#9b5de5', variant: 'solid' },
+            { label: 'Holiday', color: '#ff914d', variant: 'solid' },
+            { label: 'Booked', color: '#d3d3d3', variant: 'solid' },
           ]}
         />
       </div>
