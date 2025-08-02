@@ -1,7 +1,7 @@
 import Legends from './components/Legends';
 import MonthsDropdown from './components/MonthsDropdown';
 import TimeSlotPicker from './components/TimeSlotPicker';
-import { WeeklySlider, type WeekSelection } from './components/WeekSlider';
+import { WeekSlider, type WeekSelection } from './components/WeekSlider';
 // import { WeekSlider, MonthsDropdown, Legends, TimeSlotPicker } from "appointment-scheduler";
 
 import styled from '@emotion/styled';
@@ -42,7 +42,7 @@ function App() {
   return (
     <Container>
       <TopRightFlex>
-        <WeeklySlider
+        <WeekSlider
           selectedDate="2025-08-02"
           onDateSelect={(selected: WeekSelection) => console.log('Selected:', selected)}
           onWeekChange={(start, end) => console.log('Week:', start, end)}
