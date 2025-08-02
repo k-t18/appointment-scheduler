@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 // Types for styled component props
 export interface DateCardProps {
   isToday: boolean;
-  isSelected: boolean;
+  isSelected: boolean | undefined;
   isDisabled: boolean;
   isWeekend: boolean;
   hasAvailability: boolean;
