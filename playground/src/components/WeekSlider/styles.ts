@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 // Types for styled component props
 export interface DateCardProps {
   isToday: boolean;
-  isSelected: boolean | undefined;
+  isSelected: boolean;
   isDisabled: boolean;
   isWeekend: boolean;
   hasAvailability: boolean;
@@ -32,7 +32,7 @@ export const Container = styled.div<ContainerProps>`
   align-items: center;
   gap: 1rem;
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
-  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 `;
 
 export const DateGrid = styled.div`
@@ -52,34 +52,34 @@ export const DateCard = styled.div<DateCardProps>`
   align-items: center;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
-  cursor: ${({ isDisabled }) => (isDisabled ? "not-allowed" : "pointer")};
+  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease-in-out;
   position: relative;
 
   // Base styling
   background-color: ${({ isToday, isSelected, isDisabled, hasAvailability }) => {
-    if (isDisabled) return "#f8f9fa";
-    if (isSelected) return "#3b82f6";
-    if (isToday) return "#D7F7FB";
-    if (!hasAvailability) return "#fef2f2";
-    return "#fff";
+    if (isDisabled) return '#f8f9fa';
+    if (isSelected) return '#3b82f6';
+    if (isToday) return '#D7F7FB';
+    if (!hasAvailability) return '#fef2f2';
+    return '#fff';
   }};
 
   color: ${({ isToday, isSelected, isDisabled, hasAvailability }) => {
-    if (isDisabled) return "#6b7280";
-    if (isSelected) return "#fff";
-    if (isToday) return "#00abc9";
-    if (!hasAvailability) return "#dc2626";
-    return "#2a3547";
+    if (isDisabled) return '#6b7280';
+    if (isSelected) return '#fff';
+    if (isToday) return '#00abc9';
+    if (!hasAvailability) return '#dc2626';
+    return '#2a3547';
   }};
 
   border: 2px solid
     ${({ isSelected, isToday, hasAvailability, isDisabled }) => {
-      if (isSelected) return "#3b82f6";
-      if (isToday) return "#00abc9";
-      if (isDisabled) return "#e5e7eb";
-      if (!hasAvailability) return "#fecaca";
-      return "transparent";
+      if (isSelected) return '#3b82f6';
+      if (isToday) return '#00abc9';
+      if (isDisabled) return '#e5e7eb';
+      if (!hasAvailability) return '#fecaca';
+      return 'transparent';
     }};
 
   // Hover effects
@@ -133,7 +133,7 @@ export const AvailabilityBadge = styled.span<AvailabilityBadgeProps>`
   position: absolute;
   top: -0.25rem;
   right: -0.25rem;
-  background-color: ${({ count }) => (count > 0 ? "#10b981" : "#ef4444")};
+  background-color: ${({ count }) => (count > 0 ? '#10b981' : '#ef4444')};
   color: white;
   font-size: 0.625rem;
   font-weight: 600;
@@ -150,11 +150,11 @@ export const AvailabilityBadge = styled.span<AvailabilityBadgeProps>`
 export const NavButton = styled.button<NavButtonProps>`
   border: none;
   background: transparent;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   padding: 0.5rem;
   border-radius: 0.375rem;
   transition: all 0.2s ease-in-out;
-  color: ${({ disabled }) => (disabled ? "#9ca3af" : "#374151")};
+  color: ${({ disabled }) => (disabled ? '#9ca3af' : '#374151')};
 
   &:hover {
     ${({ disabled }) =>
@@ -196,57 +196,57 @@ export const MonthYear = styled.span`
 
 export const theme = {
   colors: {
-    primary: "#3b82f6",
-    primaryLight: "#D7F7FB",
-    primaryDark: "#00abc9",
-    success: "#10b981",
-    danger: "#ef4444",
-    warning: "#f59e0b",
+    primary: '#3b82f6',
+    primaryLight: '#D7F7FB',
+    primaryDark: '#00abc9',
+    success: '#10b981',
+    danger: '#ef4444',
+    warning: '#f59e0b',
     gray: {
-      50: "#f9fafb",
-      100: "#f3f4f6",
-      200: "#e5e7eb",
-      300: "#cbd5e1",
-      400: "#9ca3af",
-      500: "#6b7280",
-      600: "#4b5563",
-      700: "#374151",
-      800: "#2a3547",
-      900: "#111827",
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#cbd5e1',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#2a3547',
+      900: '#111827',
     },
     background: {
-      white: "#ffffff",
-      light: "#f8f9fa",
-      danger: "#fef2f2",
-      disabled: "#f8fafc",
+      white: '#ffffff',
+      light: '#f8f9fa',
+      danger: '#fef2f2',
+      disabled: '#f8fafc',
     },
     border: {
-      default: "transparent",
-      light: "#e5e7eb",
-      danger: "#fecaca",
-      focus: "#3b82f6",
+      default: 'transparent',
+      light: '#e5e7eb',
+      danger: '#fecaca',
+      focus: '#3b82f6',
     },
   },
   breakpoints: {
-    mobile: "640px",
-    tablet: "768px",
-    desktop: "1024px",
+    mobile: '640px',
+    tablet: '768px',
+    desktop: '1024px',
   },
   spacing: {
-    xs: "0.25rem",
-    sm: "0.5rem",
-    md: "0.75rem",
-    lg: "1rem",
-    xl: "1.5rem",
-    xxl: "2rem",
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '0.75rem',
+    lg: '1rem',
+    xl: '1.5rem',
+    xxl: '2rem',
   },
   borderRadius: {
-    sm: "0.375rem",
-    md: "0.5rem",
-    lg: "0.75rem",
+    sm: '0.375rem',
+    md: '0.5rem',
+    lg: '0.75rem',
   },
   shadows: {
-    sm: "0 1px 2px rgba(16, 24, 40, 0.1)",
-    md: "0 4px 6px rgba(16, 24, 40, 0.1)",
+    sm: '0 1px 2px rgba(16, 24, 40, 0.1)',
+    md: '0 4px 6px rgba(16, 24, 40, 0.1)',
   },
 };

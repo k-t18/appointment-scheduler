@@ -67,7 +67,7 @@ export default function WeeklySlider({
       <DateGrid>
         {weekDates.map((date) => {
           const dateStr = date.format('YYYY-MM-DD');
-          const isSelected = selectedInternalDate?.isSame(date, 'day');
+          const isSelected = selectedInternalDate ? selectedInternalDate.isSame(date, 'day') : false;
           const isToday = date.isSame(today, 'day');
           const isDisabled = isDateDisabled(date);
           const availabilityCount = dateAvailability[dateStr];

@@ -46,7 +46,7 @@ function App() {
           selectedDate="2025-08-02"
           onDateSelect={(selected: WeekSelection) => console.log('Selected:', selected)}
           onWeekChange={(start, end) => console.log('Week:', start, end)}
-          availableDates={['2025-08-01', '2025-08-02', '2025-08-03']}
+          // availableDates={['2025-08-01', '2025-08-02', '2025-08-03']}
           dateAvailability={{
             '2025-08-01': 3,
             '2025-08-02': 5,
