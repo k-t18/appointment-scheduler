@@ -22,12 +22,13 @@ export function useWeeklySlider(props: WeeklySliderProps) {
   } = props;
 
   const today = useMemo(() => dayjs(), []);
-  const [selectedInternalDate, setSelectedInternalDate] = useState<Dayjs | null>(null);
-  const [startDate, setStartDate] = useState(() => getStartOfWeek(today, weekStartsOn));
+  // init once; will re-sync via the single effect below
+  const [selectedInternalDate, setSelectedInternalDate] = useState<Dayjs | null>(highlightToday ? today : null);
+  const [startDate, setStartDate] = useState<Dayjs>(() => getStartOfWeek(highlightToday ? today : dayjs(), weekStartsOn));
 
+  // Derived
   const weekDates = useMemo(() => Array.from({ length: 7 }, (_, i) => startDate.add(i, 'day')), [startDate]);
   const weekEnd = useMemo(() => startDate.add(6, 'day'), [startDate]);
-
   const weekRange = useMemo(() => {
     const start = startDate.format('MMM D');
     const end = weekEnd.format('MMM D');
@@ -49,30 +50,16 @@ export function useWeeklySlider(props: WeeklySliderProps) {
     return nextWeekStart.isSame(maxDayjs, 'day') || nextWeekStart.isBefore(maxDayjs, 'day');
   }, [startDate, maxDate]);
 
-  // ==========================================
-  // DATE VALIDATION LOGIC
-  // ==========================================
-
+  // Validation
   const isDateDisabled = useCallback(
     (date: Dayjs): boolean => {
       const dateStr = date.format('YYYY-MM-DD');
-
-      // Check if explicitly disabled
       if (disabledDates.includes(dateStr)) return true;
-
-      // Check if not in available dates (if provided)
       if (availableDates && !availableDates.includes(dateStr)) return true;
-
-      // Check date range constraints
       if (minDate && date.isBefore(dayjs(minDate), 'day')) return true;
       if (maxDate && date.isAfter(dayjs(maxDate), 'day')) return true;
-
-      // Check past dates
       if (excludePastDates && date.isBefore(today, 'day')) return true;
-
-      // Check weekends
       if (excludeWeekends && (date.day() === 0 || date.day() === 6)) return true;
-
       return false;
     },
     [disabledDates, availableDates, minDate, maxDate, excludePastDates, excludeWeekends, today],
@@ -89,69 +76,57 @@ export function useWeeklySlider(props: WeeklySliderProps) {
     [showDateCount, dateAvailability, isDateDisabled],
   );
 
-  // ==========================================
-  // EVENT HANDLERS
-  // ==========================================
-
+  // Handlers
   const handlePrev = useCallback(() => {
     if (disabled || !canGoPrevious) return;
     const newStart = startDate.subtract(7, 'day');
     setStartDate(newStart);
-    onWeekChange?.(newStart.format('YYYY-MM-DD'), newStart.add(6, 'day').format('YYYY-MM-DD'));
-  }, [disabled, canGoPrevious, startDate, onWeekChange]);
+  }, [disabled, canGoPrevious, startDate]);
 
   const handleNext = useCallback(() => {
     if (disabled || !canGoNext) return;
     const newStart = startDate.add(7, 'day');
     setStartDate(newStart);
-    onWeekChange?.(newStart.format('YYYY-MM-DD'), newStart.add(6, 'day').format('YYYY-MM-DD'));
-  }, [disabled, canGoNext, startDate, onWeekChange]);
+  }, [disabled, canGoNext, startDate]);
 
   const handleDateClick = useCallback(
     (date: Dayjs) => {
       if (disabled || isDateDisabled(date)) return;
       setSelectedInternalDate(date);
-      const selection = createWeekSelection(date, startDate, weekEnd);
-      onDateSelect?.(selection);
+      onDateSelect?.(createWeekSelection(date, startDate, weekEnd));
     },
     [disabled, isDateDisabled, startDate, weekEnd, onDateSelect],
   );
 
-  // Initial mount setup
+  // 1) Single sync effect: respond to external selectedDate / config changes
   useEffect(() => {
-    if (selectedDate) {
-      const selected = dayjs(selectedDate);
-      setSelectedInternalDate(selected);
-      setStartDate(getStartOfWeek(selected, weekStartsOn));
-    } else if (highlightToday) {
-      setSelectedInternalDate(today);
-      setStartDate(getStartOfWeek(today, weekStartsOn));
+    const base = selectedDate ? dayjs(selectedDate) : highlightToday ? today : null;
+    if (base) {
+      setSelectedInternalDate(base);
+      setStartDate(getStartOfWeek(base, weekStartsOn));
     }
-  }, []); // only on mount
+  }, [selectedDate, weekStartsOn, highlightToday, today]);
 
-  // Notify parent on initial week mount
+  // 2) Notify parent whenever startDate changes (covers mount + prev/next + prop changes)
   useEffect(() => {
     onWeekChange?.(startDate.format('YYYY-MM-DD'), weekEnd.format('YYYY-MM-DD'));
-  }, []); // only on mount
+  }, [startDate, weekEnd, onWeekChange]);
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (disabled) return;
-      switch (event.key) {
-        case 'ArrowLeft':
-          event.preventDefault();
-          handlePrev();
-          break;
-        case 'ArrowRight':
-          event.preventDefault();
-          handleNext();
-          break;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrev();
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNext();
       }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [disabled, handlePrev, handleNext]);
 
   return {

@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import Legends from './components/Legends';
-import MonthsDropdown from './components/MonthsDropdown';
+import MonthsDropdown from './components/MonthsDropdown/MonthsDropdown';
 import TimeSlotPicker from './components/TimeSlotPicker';
 import { WeekSlider, type WeekSelection } from './components/WeekSlider';
 // import { WeekSlider, MonthsDropdown, Legends, TimeSlotPicker } from "appointment-scheduler";
 
 import styled from '@emotion/styled';
+import dayjs from 'dayjs';
 
 function App() {
   // Outer wrapper
@@ -39,25 +41,32 @@ function App() {
     justify-content: center;
     align-items: center;
   `;
+  const [anchorDate, setAnchorDate] = useState(dayjs()); // controls both
+
   return (
     <Container>
       <TopRightFlex>
-        <WeekSlider
-          selectedDate="2025-08-02"
+        {/* <WeekSlider
           onDateSelect={(selected: WeekSelection) => console.log('Selected:', selected)}
           onWeekChange={(start, end) => console.log('Week:', start, end)}
           // availableDates={['2025-08-01', '2025-08-02', '2025-08-03']}
-          dateAvailability={{
-            '2025-08-01': 3,
-            '2025-08-02': 5,
-            '2025-08-03': 7,
-          }}
+          
           highlightToday={true}
           excludeWeekends={false}
           showWeekRange={true}
+          /> */}
+        <WeekSlider
+          selectedDate={anchorDate.format('YYYY-MM-DD')} // if your prop is string
+          onDateSelect={(selected: WeekSelection) => console.log('Selected:', selected)}
+          onWeekChange={(s, e) => console.log('week:', s, e)}
+          showWeekRange
         />
+
         <div className="">
-          <MonthsDropdown />
+          <MonthsDropdown
+            value={anchorDate}
+            onChange={(firstOfMonth) => setAnchorDate(firstOfMonth)} // 👈 go to month start
+          />{' '}
         </div>
       </TopRightFlex>
       <div className="mt-4">
